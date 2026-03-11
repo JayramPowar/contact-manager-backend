@@ -6,7 +6,7 @@ export const errorHandler = (err, req, res, next) => {
       res.json({
         title: "Validation failed",
         message: err.message,
-        stackTrace: err.stack,
+        // stackTrace: err.stack,
       });
       break;
 
@@ -14,7 +14,7 @@ export const errorHandler = (err, req, res, next) => {
         res.json({
         title: "Unauthorized",
         message: err.message,
-        stackTrace: err.stack,
+        // stackTrace: err.stack,
       });
         break;
 
@@ -22,7 +22,7 @@ export const errorHandler = (err, req, res, next) => {
         res.json({
         title: "Forbidden",
         message: err.message,
-        stackTrace: err.stack,
+        // stackTrace: err.stack,
       });
         break;
 
@@ -30,7 +30,15 @@ export const errorHandler = (err, req, res, next) => {
         res.json({
         title: "Internal Server Error",
         message: err.message,
-        stackTrace: err.stack,
+        // stackTrace: err.stack,
+      });
+        break;
+
+    case 404:
+        res.json({
+        title: "Not Found",
+        message: err.message,
+        // stackTrace: err.stack,
       });
         break;
 
