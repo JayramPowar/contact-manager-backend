@@ -1,8 +1,10 @@
 import asyncHandler from 'express-async-handler';
+import Contact from '../models/contactModel.js';
 
 //* get all contacts
 export const getContacts = asyncHandler(async(req, res) => {
-    res.status(200).json({message: "Get all contacts"});    
+    const contacts = await Contact.find();
+    res.status(200).json(contacts);    
 });
 
 //Create new contact
