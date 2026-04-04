@@ -44,6 +44,13 @@ export const updateContact = asyncHandler(async (req, res) => {
     res.status(404);
     throw new Error("Contact not found");
   }
+
+  //? Check if the logged-in user is the owner of the contact
+  if(contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User not authorized");
+  }
+
   const updatedContact = await Contact.findByIdAndUpdate(
     req.params.id,
     req.body,
@@ -53,11 +60,20 @@ export const updateContact = asyncHandler(async (req, res) => {
 });
 
 export const deleteContact = asyncHandler(async (req, res) => {
-  const contact = await Contact.findByIdAndDelete(req.params.id);
+  const contact = await Contact.findById(req.params.id);
+
   if (!contact) {
     res.status(404);
     throw new Error("Contact not found");
   }
 
-  res.status(200).json(contact);
+  //? Check ownership BEFORE deleting
+  if (contact.user_id.toString() !== req.user.id) {
+    res.status(403);
+    throw new Error("User not authorized");
+  }
+
+  await Contact.deleteOne({ _id: req.params.id });
+
+  res.status(200).json({ message: "Contact deleted successfully" });
 });
