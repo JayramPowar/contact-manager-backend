@@ -3,7 +3,7 @@ import Contact from "../models/contactModel.js";
 
 //* get all contacts
 export const getContacts = asyncHandler(async (req, res) => {
-  const contacts = await Contact.find();
+  const contacts = await Contact.find({ user_id: req.user.id });
   if (!contacts) {
     res.status(404);
     throw new Error("Contacts not found");
@@ -11,17 +11,23 @@ export const getContacts = asyncHandler(async (req, res) => {
   res.status(200).json(contacts);
 });
 
-//Create new contact
+// Create new contact
 export const createContact = asyncHandler(async (req, res) => {
-  console.log(req.body);
   const { name, email, phone } = req.body;
   if (!name || !email || !phone) {
     res.status(400);
     throw new Error("All fields are mandatory");
   }
-  const contact = await Contact.create({ name, email, phone });
+  const contact = await Contact.create({
+    name,
+    email,
+    phone,
+    user_id: req.user.id,
+  });
+  
   res.status(201).json(contact);
 });
+
 
 export const getContact = asyncHandler(async (req, res) => {
   const contact = await Contact.findById(req.params.id);

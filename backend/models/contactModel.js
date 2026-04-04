@@ -5,7 +5,7 @@ const contactSchema = mongoose.Schema({
     user_id:{
         type: mongoose.Schema.Types.ObjectId,
         required: true,
-        ref: "User",
+        ref: "User"
     },
     name:{
         type: String,
@@ -14,12 +14,10 @@ const contactSchema = mongoose.Schema({
     email:{
         type: String,
         required: [true, "Please enter your email"],
-        unique: true,
     },
     phone:{
         type: String,
-        required: [true, "Please enter your phone number"],
-        unique: true,
+        required: [true, "Please enter your phone number"], 
     },
 },{
     timestamps: true,

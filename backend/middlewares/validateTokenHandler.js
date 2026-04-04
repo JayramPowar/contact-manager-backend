@@ -5,20 +5,21 @@ const validateTokenHandler = expressAsyncHandler(async (req, res, next) => {
     let token;
     let authHeader = req.headers.authorization || req.headers.Authorization;
 
-    //* In header, it may possible that the token is sent as "Bearer YOUR_TOKEN" so we need to split it and get the token part
-    if(authHeader && authHeader.startsWith("Bearer")){
+    if (authHeader && authHeader.startsWith("Bearer")) {
         token = authHeader.split(" ")[1];
-        jwt.verify(token, process.env.JWT_SECRET, (err, decoded) => {
-            if(err){
-                res.status(401);
-                throw new Error("Unauthorized, invalid token");
-            }
-            req.user = decoded.user;
-            console.log(decoded);
-            next();
-        });
-    }
-    if(!token){
+
+        try {
+            const decoded = jwt.verify(token, process.env.JWT_SECRET);
+
+            req.user = decoded.user; // ✅ correct for your token structure
+            console.log("DECODED:", decoded);
+
+            next(); // ✅ now in proper flow
+        } catch (err) {
+            res.status(401);
+            throw new Error("Unauthorized, invalid token");
+        }
+    } else {
         res.status(401);
         throw new Error("Unauthorized, no token");
     }
