@@ -59,6 +59,8 @@ export const loginUser = asyncHandler(async (req, res) => {
       process.env.JWT_SECRET,
       { expiresIn: "15m" },
     );
+    console.log(accessToken);
+    
     res.status(200).json({ accessToken });
   }else{
     res.status(401);
@@ -69,5 +71,5 @@ export const loginUser = asyncHandler(async (req, res) => {
 });
 
 export const getCurrentUser = asyncHandler(async (req, res) => {
-  res.json({ message: "Current user here" });
+  res.json(req.user);
 });
